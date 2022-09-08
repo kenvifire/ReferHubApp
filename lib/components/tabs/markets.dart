@@ -1,5 +1,6 @@
-import 'package:ReferHubApp/models/marketItem.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/marketItem.dart';
 
 class MarketsPage extends StatefulWidget {
   @override

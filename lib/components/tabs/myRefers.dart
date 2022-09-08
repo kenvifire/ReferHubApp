@@ -1,5 +1,5 @@
-import 'package:ReferHubApp/models/referItem.dart';
 import 'package:flutter/material.dart';
+import 'package:ref_hub_app/models/referItem.dart';
 
 class MyRefersPage extends StatefulWidget {
   @override

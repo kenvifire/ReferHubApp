@@ -1,12 +1,10 @@
-import 'package:ReferHubApp/view/friends.dart';
-import 'package:ReferHubApp/view/markets.dart';
-import 'package:ReferHubApp/view/myRefers.dart';
 import 'package:flutter/material.dart';
+import 'package:ref_hub_app/components/tabs/myRefers.dart';
+
+import 'friends.dart';
+import 'markets.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
 
   @override
   _HomePageState createState() => _HomePageState();

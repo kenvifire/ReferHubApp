@@ -1,4 +1,4 @@
-package com.itluobo.ReferHubApp
+package com.itluobo.referhubapp
 
 import io.flutter.embedding.android.FlutterActivity
 

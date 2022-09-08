@@ -1,5 +1,6 @@
-import 'package:ReferHubApp/models/friend.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/friend.dart';
 
 class FriendsPage extends StatefulWidget {
   @override
