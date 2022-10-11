@@ -24,6 +24,8 @@ dependencies:
   firebase_storage: ^10.2.16
   modal_progress_hud_nsn: ^0.1.0-nullsafety-1
   flex_color_scheme: ^5.0.1
+  uuid: 3.0.6
+  flutter_slidable: 1.3.0
 
 dev_dependencies:
   flutter_test:

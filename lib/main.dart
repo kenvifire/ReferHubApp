@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/screens/welcome_screen.dart';
+import 'package:ref_hub_app/services/referral_service.dart';
+import 'package:ref_hub_app/services/search_service.dart';
 import 'package:ref_hub_app/services/user_service.dart';
 
 import 'components/screens/home_screen.dart';
@@ -43,5 +45,7 @@ class ReferHubApp extends StatelessWidget {
 
 void setUp() {
   sl.registerSingleton<UserService>(UserService());
+  sl.registerSingleton<ReferralService>(ReferralService());
+  sl.registerSingleton<SearchService>(SearchService());
 }
 

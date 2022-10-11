@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../tabs/friends.dart';
-import '../tabs/markets.dart';
-import '../tabs/myRefers.dart';
+import '../tabs/referrals_tab.dart';
+import '../tabs/markets_tab.dart';
+import '../tabs/settings_tab.dart';
 
 final sl = GetIt.instance;
 
@@ -22,13 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late StreamSubscription<dynamic> _subscription;
 
-  final _sl = GetIt.I;
-
-
  @override
   void initState() {
-
-
     super.initState();
   }
 
@@ -48,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("My Vide Logs",),
+            title: const Text("My Referrals",),
             centerTitle: true,
             automaticallyImplyLeading: false,
 
@@ -57,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
           body: TabBarView(
             // physics: NeverScrollableScrollPhysics(),
             children: [
-              FriendsPage(),
-              MarketsPage(),
-              MyRefersPage(),
+              ReferralsTab(),
+              MarketsTab(),
+              SettingsTab(),
             ],
           ),
 
@@ -79,12 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
         // indicatorColor: Colors.blue,
         tabs: [
           Tab(
-            text: "New Video",
-            icon: Icon(Icons.camera_alt),
+            text: "My Referrals",
+            icon: Icon(Icons.web),
           ),
           Tab(
-            text: "My Videos",
-            icon: Icon(Icons.calendar_month),
+            text: "Market",
+            icon: Icon(Icons.shopping_cart),
           ),
           Tab(
             text: "Settings",
@@ -94,6 +89,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 }

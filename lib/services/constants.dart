@@ -1,0 +1,1 @@
+const kDB = 'referrals';
