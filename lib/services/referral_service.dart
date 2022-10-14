@@ -12,12 +12,19 @@ class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
 
+  initUserData() async {
+    final uid = _userService.getUser()!.uid;
+    await _db.collection(kDB).doc(uid).set({
+      'items':[]
+    });
+  }
+
   Future<List<ReferItem>> loadReferrals() async {
       final uid = _userService.getUser()!.uid;
       final data = await _db.collection(kDB).doc(uid).get();
       final referrals = data.data() as Map<String, dynamic>;
 
-      final records = referrals['items'] as List<dynamic>;
+      final records = referrals[kItems] as List<dynamic>;
       return records.map(mapItem).toList();
   }
 
@@ -54,7 +61,7 @@ class ReferralService {
     final uid = _sl.get<UserService>().getUser()!.uid;
     final record = toMap(item);
     await _db.collection(referral).doc(uid).set({
-      'items': FieldValue.arrayRemove([record])
+      kItems: FieldValue.arrayRemove([record])
     }
     );
   }

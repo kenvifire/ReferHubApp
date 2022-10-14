@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ref_hub_app/services/referral_service.dart';
 class UserService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -7,7 +8,6 @@ class UserService {
 
   authWithEmailAndPassword(String email, String password) async {
       final cred = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      initUserData();
       return cred;
   }
 
@@ -18,7 +18,7 @@ class UserService {
   }
 
   void initUserData() {
-    final uid = _sl.get<UserService>().getUser()!.uid;
+    _sl.get<ReferralService>().initUserData();
   }
 
 

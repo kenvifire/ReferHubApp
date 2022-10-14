@@ -1,1 +1,2 @@
-const kDB = 'referrals';
+const kDB = 'referral';
+const kItems = 'items';

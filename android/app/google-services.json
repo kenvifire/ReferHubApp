@@ -30,6 +30,13 @@
             {
               "client_id": "87487911593-h28ha25qkkqqbr7423muuu684oovvkoa.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "87487911593-7isu9prhce3u7kfvchvljhuj66uso13q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itluobo.myReferHubApp"
+              }
             }
           ]
         }
