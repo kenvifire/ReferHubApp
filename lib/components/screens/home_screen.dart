@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const Text("My Referrals",),
             centerTitle: true,
             automaticallyImplyLeading: false,
-
           ),
           bottomNavigationBar: menu(context),
           body: TabBarView(

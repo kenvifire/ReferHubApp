@@ -4,6 +4,8 @@ import 'package:ref_hub_app/components/widgets/calendar_view.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
 
+import '../screens/edit_referral_screen.dart';
+
 class ReferralsTab extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ReferralsTabState();
@@ -16,19 +18,28 @@ class _ReferralsTabState extends State<ReferralsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ReferItem>>(
-      future: _sl.get<ReferralService>().loadReferrals(),
-        builder: (context, snapshot) {
-          return RefreshIndicator(
-              child: Container(
-                child: _list(snapshot),
-              ), onRefresh: onRefresh);
-    });
+    return Column(
+      children: [
+        FutureBuilder<List<ReferItem>>(
+            future: _sl.get<ReferralService>().loadReferrals(),
+            builder: (context, snapshot) {
+              return RefreshIndicator(
+                  child: Container(
+                    child: _list(snapshot),
+                  ),
+                  onRefresh: onRefresh);
+            }),
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => {
+            Navigator.pushNamed(context, EditReferralScreen.id)
+        })
+      ],
+    );
   }
 
   Widget _list(AsyncSnapshot snapshot) {
-    if(snapshot.hasData) {
-
+    if (snapshot.hasData) {
       return ListView.builder(
           itemCount: referrals.length,
           itemBuilder: (context, index) {
@@ -43,12 +54,8 @@ class _ReferralsTabState extends State<ReferralsTab> {
   }
 
   Future<void> onRefresh() async {
-    List<ReferItem> refreshedRecords = await _sl.get<ReferralService>().loadReferrals();
-    setState(() {
-
-    });
-
+    List<ReferItem> refreshedRecords =
+        await _sl.get<ReferralService>().loadReferrals();
+    setState(() {});
   }
-
 }
-
