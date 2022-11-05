@@ -5,12 +5,12 @@ import 'package:ref_hub_app/models/query.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/constants.dart';
 import 'package:ref_hub_app/services/user_service.dart';
-import 'package:uuid/uuid.dart';
 
 final _sl = GetIt.instance;
 class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
+  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled"];
 
   initUserData() async {
     final uid = _userService.getUser()!.uid;
@@ -28,16 +28,23 @@ class ReferralService {
       return records.map(mapItem).toList();
   }
 
-  ReferItem mapItem(e) => ReferItem(title: e['title'], link: e['link'], id: e['id'],
-  enabled: e['enabled'], tags: e['tags']);
+  ReferItem mapItem(e) {
+     final data = e as Map<String, dynamic>;
+     final tags = [];
+     data.forEach((key, value) {
+       if(!_nonTagFields.contains(key)) {
+         tags.add(key);
+       }
+     });
+    return ReferItem(title: e['title'], link: e['link'], id: e['id'],
+        enabled: e['enabled'], tags: tags.map((e) => e as String).toList());
+  }
 
 
-  void addReferral(ReferItem item) async {
+  Future<void> addReferral(ReferItem item) async {
     final uid = _sl.get<UserService>().getUser()!.uid;
-    String id = const Uuid().v4();
-    item.id = id;
     Map<String, dynamic> record = toMap(item);
-    await _db.collection(referral).doc(uid).set({
+    return await _db.collection(referral).doc(uid).update({
       'items': FieldValue.arrayUnion([record])
       }
     );
@@ -50,10 +57,13 @@ class ReferralService {
       'title': item.title,
       'link': item.link,
       'code': item.code,
-      'tags': [
-        item.tags
-      ]
+      'desc': item.desc,
+      'enabled': item.enabled
     };
+
+    for(String tag in item.tags) {
+      record[tag] = true;
+    }
     return record;
   }
 
@@ -74,7 +84,8 @@ class ReferralService {
   void updateReferral(ReferItem item) {
     
   }
-  
+
+
   void query(ItemQuery query) {
     _db.collection(referral)
         .where('tag', arrayContainsAny: query.tags)
