@@ -11,10 +11,25 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.3.7'
+      - name: Decode keystore
+        env:
+          ENCODED_STRING: ${{ secrets.KEYSTORE }}
+        run: |
+          TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+          mkdir "${TMP_KEYSTORE_FILE_PATH}"
+          echo $ENCODED_STRING | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"/keystore.jks
+          mkdir -p ${GITHUB_WORKSPACE}/android/app/keystore/
+
       - run: flutter pub get
       - run: flutter test
-      - run: flutter build apk
+      - name: Build release
+        run: |
+          flutter build appbundle
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/bundle/release/app-release.aab
