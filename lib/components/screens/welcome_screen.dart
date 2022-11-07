@@ -39,7 +39,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 AnimatedTextKit(animatedTexts: [
                   TypewriterAnimatedText(
-                    'My Video Logs',
+                    'My Refer Hub',
                     textStyle: TextStyle(
                       fontSize: Theme.of(context).textTheme.headline5?.fontSize,
                       fontWeight: Theme.of(context).textTheme.headline5?.fontWeight

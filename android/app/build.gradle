@@ -80,14 +80,11 @@ android {
                 release {
                     def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
                     def allFilesFromDir = new File(tmpFilePath).listFiles()
-                    println("size:" + allFilesFromDir.size())
                     def destFile = file("keystore/keystore.jks")
 
                     if (allFilesFromDir != null && !destFile.exists()) {
                         def keystoreFile = allFilesFromDir.first()
                         def result = keystoreFile.renameTo(destFile)
-                        println(destFile)
-                        println("rename result:" + result);
                     }
 
                     storeFile = file("keystore/keystore.jks")
