@@ -12,38 +12,41 @@ class ReferralsTab extends StatefulWidget {
 }
 
 class _ReferralsTabState extends State<ReferralsTab> {
-  final List<ReferItem> referrals = [];
+  late final List<ReferItem> referrals = [];
   final _sl = GetIt.instance;
   late Future<List<ReferItem>> referItems;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FutureBuilder<List<ReferItem>>(
-            future: _sl.get<ReferralService>().loadReferrals(),
-            builder: (context, snapshot) {
-              return RefreshIndicator(
-                  child: Container(
-                    child: _list(snapshot),
-                  ),
-                  onRefresh: onRefresh);
-            }),
-        FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => {
-            Navigator.pushNamed(context, EditReferralScreen.id)
-        })
-      ],
-    );
+    return FutureBuilder<List<ReferItem>>(
+        future: _sl.get<ReferralService>().loadReferrals(),
+        builder: (context, snapshot) {
+          return RefreshIndicator(
+              child: Column(children: [
+                Flexible(child: _list(snapshot)),
+                FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.pushNamed(context, EditReferralScreen.id);
+                    })
+              ]),
+              onRefresh: onRefresh);
+        });
   }
 
   Widget _list(AsyncSnapshot snapshot) {
     if (snapshot.hasData) {
+      List<ReferItem> items = snapshot.data as List<ReferItem>;
       return ListView.builder(
-          itemCount: referrals.length,
+
+          itemCount: items.length,
           itemBuilder: (context, index) {
-            final item = referrals[index];
+            final item = items[index];
             return ReferItemTile(referItem: item);
           });
     } else {
@@ -56,6 +59,7 @@ class _ReferralsTabState extends State<ReferralsTab> {
   Future<void> onRefresh() async {
     List<ReferItem> refreshedRecords =
         await _sl.get<ReferralService>().loadReferrals();
-    setState(() {});
+    setState(() {
+    });
   }
 }

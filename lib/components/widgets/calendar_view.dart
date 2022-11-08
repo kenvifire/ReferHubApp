@@ -14,47 +14,47 @@ class ReferItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      SizedBox(
-        height: 80,
-        child: Slidable(
-          key: Key(referItem.id),
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            children: [
-              SlidableAction(
-                autoClose: false,
-                onPressed: delete,
-                backgroundColor: const Color(0xFFFE4A49),
-                foregroundColor: Colors.white,
-                icon: Icons.delete,
-                label: 'Delete',
+      Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: 12.0,
+          vertical: 4.0
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: SizedBox(
+          height: 80,
+          child: Slidable(
+            key: Key(referItem.id),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  autoClose: false,
+                  onPressed: delete,
+                  backgroundColor: const Color(0xFFFE4A49),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: 'Delete',
 
-              ),
-              SlidableAction(
-                onPressed: doNothing,
-                backgroundColor: const Color(0xFF21B7CA),
-                foregroundColor: Colors.white,
-                icon: Icons.share,
-                label: 'Share',
-              )
-            ],
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) =>
-                      ViewReferralScreen())
-              );
-            },
-            child: Ink(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(referItem.title),
-                ],
-              ),
+                ),
+                SlidableAction(
+                  onPressed: doNothing,
+                  backgroundColor: const Color(0xFF21B7CA),
+                  foregroundColor: Colors.white,
+                  icon: Icons.share,
+                  label: 'Share',
+                )
+              ],
             ),
-          )
+          child: ListTile(
+              title: Text(referItem.title),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ViewReferralScreen()));
+              }),
+          ),
         ),
       );
   }
