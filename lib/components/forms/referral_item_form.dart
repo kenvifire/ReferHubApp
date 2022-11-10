@@ -8,7 +8,8 @@ import 'package:ref_hub_app/services/referral_service.dart';
 import 'package:uuid/uuid.dart';
 
 class ReferItemForm extends StatefulWidget {
-  ReferItemForm({Key? key}) : super(key: key);
+  final ReferItem? item;
+  ReferItemForm({this.item, Key? key}) : super(key: key);
 
   @override
   State<ReferItemForm> createState() => _ReferItemFormState();
@@ -20,6 +21,13 @@ class _ReferItemFormState extends State<ReferItemForm> {
   String? codeLinkError;
   late String errMsg = "";
   bool showSpinner = false;
+  bool enableEdit = false;
+
+  @override
+  void initState() {
+    super.initState();
+    enableEdit = widget.item == null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +38,15 @@ class _ReferItemFormState extends State<ReferItemForm> {
         child: Column(
           children: [
             FormBuilderTextField(name: 'name',
+              initialValue: widget.item?.title,
+              enabled: enableEdit,
               decoration: InputDecoration(labelText: 'Enter name',
+
               errorText: codeLinkError ?? ""),
             ),
             FormBuilderTextField(
+              enabled: enableEdit,
+              initialValue: widget.item?.link,
               name: 'link',
               decoration: InputDecoration(labelText: 'Enter link',
                 errorText: codeLinkError ?? ""
@@ -43,10 +56,14 @@ class _ReferItemFormState extends State<ReferItemForm> {
               ]),
             ),
             FormBuilderTextField(
+              enabled: enableEdit,
+              initialValue: widget.item?.code,
               name: 'code',
               decoration: const InputDecoration(labelText: "Enter code"),
             ),
             FormBuilderCheckboxGroup<String>(name: 'tags',
+                enabled: enableEdit,
+                initialValue: widget.item?.tags,
                 decoration: const InputDecoration(labelText: 'Tags for this referral'),
                 options: const [
                   FormBuilderFieldOption(value: 'software'),
@@ -56,14 +73,24 @@ class _ReferItemFormState extends State<ReferItemForm> {
                   FormBuilderFieldOption(value: 'others'),
                 ]),
             FormBuilderTextField(name: 'description',
+              enabled: enableEdit,
+              initialValue: widget.item?.desc,
               decoration: const InputDecoration(labelText: 'Description for this referral'),
+            ),
+            FormBuilderSwitch(
+              enabled: enableEdit,
+              initialValue: widget.item?.enabled,
+              decoration: const InputDecoration(labelText: 'Enable this referral'),
+              name: 'enabled', title: Text('enabled'),
+
             ),
             Text(errMsg, style: const TextStyle(
                 color: Colors.red
             ),
               textAlign: TextAlign.center,
             ),
-            ElevatedButton(onPressed: () async {
+            !enableEdit ? Container(): ElevatedButton(
+                onPressed: () async {
               if(_formKey.currentState!.validate()) {
                 final link = _formKey.currentState!.fields['link']?.value;
                 final code = _formKey.currentState!.fields['code']?.value;

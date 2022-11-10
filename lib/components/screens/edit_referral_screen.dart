@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ref_hub_app/components/forms/referral_item_form.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:ref_hub_app/models/referItem.dart';
 
 class EditReferralScreen extends StatefulWidget {
   static String id = 'EditReferralScreen';
+  final ReferItem? item;
 
-  const EditReferralScreen({Key? key}) : super(key: key);
+  const EditReferralScreen({this.item, Key? key}) : super(key: key);
 
   @override
   State<EditReferralScreen> createState() => _EditReferralScreenState();
@@ -16,7 +17,7 @@ class _EditReferralScreenState extends State<EditReferralScreen> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(title: Text('Edit Referral')),
-      body: ReferItemForm(),
+      body: ReferItemForm(item: widget.item,),
     );
   }
 }

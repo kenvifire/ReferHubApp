@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
-import 'package:ref_hub_app/components/screens/view_referral_screen.dart';
+import 'package:ref_hub_app/components/screens/edit_referral_screen.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 
 
@@ -50,9 +50,10 @@ class ReferItemTile extends StatelessWidget {
             ),
           child: ListTile(
               title: Text(referItem.title),
+              subtitle: Text(referItem.desc ?? ""),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ViewReferralScreen()));
+                    builder: (context) => EditReferralScreen(item: this.referItem,)));
               }),
           ),
         ),
