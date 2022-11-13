@@ -28,8 +28,6 @@ class ReferItemTile extends StatelessWidget {
         child: SizedBox(
           height: 80,
           child: Slidable(
-
-            key: Key(referItem.id),
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               dismissible: DismissiblePane(onDismissed: () {}),

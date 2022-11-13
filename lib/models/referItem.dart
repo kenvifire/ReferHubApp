@@ -1,14 +1,12 @@
-import 'package:flutter/foundation.dart';
-
 class ReferItem {
-  final String id;
+  final String? id;
   final String title;
   final String? link;
   final String? code;
   final List<String> tags;
   final String? desc;
   late final bool enabled;
-  ReferItem({required this.id, required this.title, this.link, this.code, required this.tags,
+  ReferItem({this.id, required this.title, this.link, this.code, required this.tags,
     required this.enabled,
     this.desc
   });

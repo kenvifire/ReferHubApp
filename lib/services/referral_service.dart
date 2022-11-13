@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/constants.dart';
@@ -5,6 +6,7 @@ import 'package:ref_hub_app/models/query.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/constants.dart';
 import 'package:ref_hub_app/services/user_service.dart';
+import 'package:uuid/uuid.dart';
 
 final _sl = GetIt.instance;
 class ReferralService {
@@ -40,10 +42,12 @@ class ReferralService {
         enabled: e['enabled'], tags: tags.map((e) => e as String).toList());
   }
 
-
   Future<void> addReferral(ReferItem item) async {
     final uid = _sl.get<UserService>().getUser()!.uid;
     Map<String, dynamic> record = toMap(item);
+    String id = Uuid().v4();
+    record['id'] = id;
+
     return await _db.collection(referral).doc(uid).update({
       'items': FieldValue.arrayUnion([record])
       }
@@ -87,8 +91,22 @@ class ReferralService {
     updateReferral(item);
   }
 
-  void updateReferral(ReferItem item) {
-    
+  Future<void> updateReferral(ReferItem item) async {
+    final uid = _sl.get<UserService>().getUser()!.uid;
+    final data = await _db.collection(kDB).doc(uid).get();
+    final referrals = data.data() as Map<String, dynamic>;
+
+    final records = referrals[kItems] as List<dynamic>;
+
+    final index = records.indexWhere((element) => (element as Map<String, dynamic>)['id'] == item.id);
+    if(index == -1) {
+      return;
+    }
+    records[index] = toMap(item);
+    await _db.collection(referral).doc(uid).update({
+      kItems: records
+    }
+    );
   }
 
 

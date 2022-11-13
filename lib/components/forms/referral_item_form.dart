@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
-import 'package:uuid/uuid.dart';
 
 class ReferItemForm extends StatefulWidget {
   final ReferItem? item;
@@ -92,8 +91,6 @@ class _ReferItemFormState extends State<ReferItemForm> {
             !enableEdit ? Container(): ElevatedButton(
                 onPressed: () async {
               if(_formKey.currentState!.validate()) {
-                final link = _formKey.currentState!.fields['link']?.value;
-                final code = _formKey.currentState!.fields['code']?.value;
 
               } else {
                 final link = _formKey.currentState!.fields['link']?.value;
@@ -102,14 +99,17 @@ class _ReferItemFormState extends State<ReferItemForm> {
                 final desc = _formKey.currentState!.fields['description']?.value;
                 final tags = _formKey.currentState!.fields['tags']?.value;
 
-                String id = Uuid().v4();
-                ReferItem item = ReferItem(id: id, title: name, tags: tags, enabled: true,
+                ReferItem item = ReferItem(id: widget.item?.id ?? null, title: name, tags: tags, enabled: true,
                     link: link, code: code, desc: desc);
                 setState(() {
                   showSpinner = true;
                 });
                 try {
-                  await _sl.get<ReferralService>().addReferral(item);
+                  if(item.id == null) {
+                    await _sl.get<ReferralService>().addReferral(item);
+                  } else {
+                    await _sl.get<ReferralService>().updateReferral(item);
+                  }
                   setState(() {
                     showSpinner = false;
                   });
@@ -124,6 +124,15 @@ class _ReferItemFormState extends State<ReferItemForm> {
             },
                 child: const Text('Submit')
             ),
+            enableEdit? Container()
+                :
+                FloatingActionButton(
+                  child: const Text('Edit'),
+                    onPressed: () {
+                    setState(() {
+                      enableEdit = true;
+                    });
+                })
 
           ],
         ),
