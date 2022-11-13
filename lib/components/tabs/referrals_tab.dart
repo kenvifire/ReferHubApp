@@ -12,7 +12,6 @@ class ReferralsTab extends StatefulWidget {
 }
 
 class _ReferralsTabState extends State<ReferralsTab> {
-  late final List<ReferItem> referrals = [];
   final _sl = GetIt.instance;
   late Future<List<ReferItem>> referItems;
 
@@ -32,7 +31,8 @@ class _ReferralsTabState extends State<ReferralsTab> {
                 FloatingActionButton(
                     child: Icon(Icons.add),
                     onPressed: () {
-                      Navigator.pushNamed(context, EditReferralScreen.id);
+                      Navigator.pushNamed(context, EditReferralScreen.id)
+                          .then((value) => { setState(() {})});
                     })
               ]),
               onRefresh: onRefresh);
@@ -42,13 +42,16 @@ class _ReferralsTabState extends State<ReferralsTab> {
   Widget _list(AsyncSnapshot snapshot) {
     if (snapshot.hasData) {
       List<ReferItem> items = snapshot.data as List<ReferItem>;
-      return ListView.builder(
 
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return ReferItemTile(referItem: item);
-          });
+      return items.isEmpty
+          ? const Center(
+              child: Text("Nothing here, add one by click the button."))
+          : ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return ReferItemTile(referItem: item, onDelete: onRefresh);
+              });
     } else {
       return Center(
         child: Text(snapshot.hasError ? 'Load error' : 'Loading...'),
@@ -57,9 +60,6 @@ class _ReferralsTabState extends State<ReferralsTab> {
   }
 
   Future<void> onRefresh() async {
-    List<ReferItem> refreshedRecords =
-        await _sl.get<ReferralService>().loadReferrals();
-    setState(() {
-    });
+    setState(() {});
   }
 }

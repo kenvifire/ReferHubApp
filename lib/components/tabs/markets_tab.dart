@@ -17,7 +17,7 @@ class _MarketsState extends State<MarketsTab> {
       itemCount: marketItems.length,
       itemBuilder: (context, index) {
         final item = marketItems[index];
-        return ReferItemTile(referItem: item);
+        return ReferItemTile(referItem: item, onDelete: () {});
       },
     );
   }

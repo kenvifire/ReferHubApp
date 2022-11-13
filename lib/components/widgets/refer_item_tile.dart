@@ -3,13 +3,15 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/screens/edit_referral_screen.dart';
 import 'package:ref_hub_app/models/referItem.dart';
+import 'package:ref_hub_app/services/referral_service.dart';
 
 
 class ReferItemTile extends StatelessWidget {
   final _sl = GetIt.instance;
   final ReferItem referItem;
+  final VoidCallback onDelete;
 
-  ReferItemTile({required this.referItem, Key? key}): super(key: key);
+  ReferItemTile({required this.referItem, required this.onDelete, Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,11 @@ class ReferItemTile extends StatelessWidget {
         child: SizedBox(
           height: 80,
           child: Slidable(
+
             key: Key(referItem.id),
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
+              dismissible: DismissiblePane(onDismissed: () {}),
               children: [
                 SlidableAction(
                   autoClose: false,
@@ -61,8 +65,14 @@ class ReferItemTile extends StatelessWidget {
   }
   void doNothing(BuildContext buildContext){}
 
-  void delete(BuildContext buildContext) {
+  void delete(BuildContext buildContext) async {
+    await _sl.get<ReferralService>().removeReferral(referItem);
+    final controller = Slidable.of(buildContext);
+    controller?.dismiss(ResizeRequest(const Duration(milliseconds: 300), () {
 
+    }),
+        duration: const Duration(milliseconds: 300));
+    onDelete();
   }
 
 }

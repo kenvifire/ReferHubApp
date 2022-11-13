@@ -67,11 +67,17 @@ class ReferralService {
     return record;
   }
 
-  void removeReferral(String uid, ReferItem item) async {
+  Future<void> removeReferral(ReferItem item) async {
     final uid = _sl.get<UserService>().getUser()!.uid;
-    final record = toMap(item);
-    await _db.collection(referral).doc(uid).set({
-      kItems: FieldValue.arrayRemove([record])
+    final data = await _db.collection(kDB).doc(uid).get();
+    final referrals = data.data() as Map<String, dynamic>;
+
+    final records = referrals[kItems] as List<dynamic>;
+
+    records.removeWhere((element) => (element as Map<String, dynamic>)['id'] == item.id);
+
+    await _db.collection(referral).doc(uid).update({
+      kItems: records
     }
     );
   }
