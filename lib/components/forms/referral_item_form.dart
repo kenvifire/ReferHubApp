@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
+import 'package:ref_hub_app/services/user_service.dart';
 
 class ReferItemForm extends StatefulWidget {
   final ReferItem? item;
@@ -98,8 +99,8 @@ class _ReferItemFormState extends State<ReferItemForm> {
                 final name = _formKey.currentState!.fields['name']?.value;
                 final desc = _formKey.currentState!.fields['description']?.value;
                 final tags = _formKey.currentState!.fields['tags']?.value;
-
-                ReferItem item = ReferItem(id: widget.item?.id ?? null, title: name, tags: tags, enabled: true,
+                final uid = _sl.get<UserService>().getUser()!.uid;
+                ReferItem item = ReferItem(id: widget.item?.id ?? null, uid: uid, title: name, tags: tags, enabled: true,
                     link: link, code: code, desc: desc);
                 setState(() {
                   showSpinner = true;

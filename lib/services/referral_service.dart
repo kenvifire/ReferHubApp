@@ -12,22 +12,26 @@ final _sl = GetIt.instance;
 class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
-  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled"];
+  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled", "uid"];
 
   initUserData() async {
-    final uid = _userService.getUser()!.uid;
-    await _db.collection(kDB).doc(uid).set({
-      'items':[]
-    });
   }
 
   Future<List<ReferItem>> loadReferrals() async {
       final uid = _userService.getUser()!.uid;
-      final data = await _db.collection(kDB).doc(uid).get();
-      final referrals = data.data() as Map<String, dynamic>;
-
-      final records = referrals[kItems] as List<dynamic>;
-      return records.map(mapItem).toList();
+      final data = await _db.collection(kDB).where("uid", isEqualTo: uid).get();
+      
+      if(data.docs.isEmpty) {
+        return Future.value([]);
+      } else {
+        List<ReferItem> items = [];
+        data.docs.forEach((doc) {
+          final item = mapItem(doc.data());
+          items.add(item);
+        });
+        
+        return Future.value(items);
+      }
   }
 
   ReferItem mapItem(e) {
@@ -38,7 +42,7 @@ class ReferralService {
          tags.add(key);
        }
      });
-    return ReferItem(title: e['title'], link: e['link'], id: e['id'],
+    return ReferItem(title: e['title'], uid: e['uid'], link: e['link'], id: e['id'],
         enabled: e['enabled'], tags: tags.map((e) => e as String).toList());
   }
 
@@ -47,12 +51,8 @@ class ReferralService {
     Map<String, dynamic> record = toMap(item);
     String id = Uuid().v4();
     record['id'] = id;
-
-    return await _db.collection(referral).doc(uid).update({
-      'items': FieldValue.arrayUnion([record])
-      }
-    );
-
+    record['uid'] = uid;
+    return await _db.collection(referral).doc(id).set(record);
   }
 
   Map<String, dynamic> toMap(ReferItem item) {
@@ -62,7 +62,8 @@ class ReferralService {
       'link': item.link,
       'code': item.code,
       'desc': item.desc,
-      'enabled': item.enabled
+      'enabled': item.enabled,
+      'uid': item.uid,
     };
 
     for(String tag in item.tags) {
@@ -72,18 +73,7 @@ class ReferralService {
   }
 
   Future<void> removeReferral(ReferItem item) async {
-    final uid = _sl.get<UserService>().getUser()!.uid;
-    final data = await _db.collection(kDB).doc(uid).get();
-    final referrals = data.data() as Map<String, dynamic>;
-
-    final records = referrals[kItems] as List<dynamic>;
-
-    records.removeWhere((element) => (element as Map<String, dynamic>)['id'] == item.id);
-
-    await _db.collection(referral).doc(uid).update({
-      kItems: records
-    }
-    );
+    await _db.collection(referral).doc(item.id).delete();
   }
 
   void disableReferral(ReferItem item) {
@@ -92,31 +82,25 @@ class ReferralService {
   }
 
   Future<void> updateReferral(ReferItem item) async {
-    final uid = _sl.get<UserService>().getUser()!.uid;
-    final data = await _db.collection(kDB).doc(uid).get();
-    final referrals = data.data() as Map<String, dynamic>;
-
-    final records = referrals[kItems] as List<dynamic>;
-
-    final index = records.indexWhere((element) => (element as Map<String, dynamic>)['id'] == item.id);
-    if(index == -1) {
-      return;
-    }
-    records[index] = toMap(item);
-    await _db.collection(referral).doc(uid).update({
-      kItems: records
-    }
-    );
+    await _db.collection(referral).doc(item.id).set(toMap(item));
   }
 
-
-  void query(ItemQuery query) {
-    _db.collection(referral)
+  Future<List<ReferItem>> query(ItemQuery query) async {
+    final snapshot = await _db.collection(referral)
         .where('tag', arrayContainsAny: query.tags)
-        .where('type', isEqualTo: query.type)
-    .where('location', isEqualTo: query.location)
-    .orderBy('score', descending: true)
+        // .where('type', isEqualTo: query.type)
+    // .where('location', isEqualTo: query.location)
+    // .orderBy('score', descending: true)
     // .startAfter(query.last.data().)
-    .limit(query.pageSize);
+    .limit(query.pageSize).get();
+    if(snapshot.docs.isEmpty) {
+      return Future.value([]);
+    }
+
+    List<ReferItem> items = [];
+    snapshot.docs.forEach((doc) {
+        items.add(mapItem(doc.data()));
+    });
+    return Future.value(items);
   }
 }
