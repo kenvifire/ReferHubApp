@@ -85,14 +85,27 @@ class ReferralService {
     await _db.collection(referral).doc(item.id).set(toMap(item));
   }
 
-  Future<List<ReferItem>> query(ItemQuery query) async {
-    final snapshot = await _db.collection(referral)
-        .where('tag', arrayContainsAny: query.tags)
-        // .where('type', isEqualTo: query.type)
-    // .where('location', isEqualTo: query.location)
+  Future<List<ReferItem>> query(ItemQuery itemQuery) async {
+    var ref = _db.collection(referral);
+    Query query = ref.limit(itemQuery.pageSize);//.orderBy('score', descending: true)
+    if(itemQuery.tags != null)  {
+      query = query.where('tag', arrayContainsAny: itemQuery.tags);
+    }
+
+    if(itemQuery.name != null) {
+      query = query.where('title', isEqualTo: itemQuery.name);
+    }
+
+
     // .orderBy('score', descending: true)
+
+    // if(itemQuery.last?.data() != null) {
+    //   query = query.startAfter(itemQuery.last?.data());
+    // }
     // .startAfter(query.last.data().)
-    .limit(query.pageSize).get();
+    //.limit(query.pageSize).get();
+
+    final snapshot = await query.get();
     if(snapshot.docs.isEmpty) {
       return Future.value([]);
     }

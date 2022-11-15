@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/widgets/refer_item_tile.dart';
 import 'package:ref_hub_app/models/query.dart';
@@ -15,6 +17,8 @@ class MarketsTab extends StatefulWidget {
 class _MarketsState extends State<MarketsTab> {
   final _sl = GetIt.instance;
   late Future<List<ReferItem>> referItems;
+  final _formKey = GlobalKey<FormBuilderState>();
+  ItemQuery query = ItemQuery();
 
   @override
   void initState() {
@@ -24,13 +28,39 @@ class _MarketsState extends State<MarketsTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ReferItem>>(
-        future: _sl.get<ReferralService>().query(ItemQuery()),
+        future: _sl.get<ReferralService>().query(query),
         builder: (context, snapshot) {
-          return RefreshIndicator(
-              child: Column(children: [
-                Flexible(child: _list(snapshot)),
-              ]),
-              onRefresh: onRefresh);
+          return Column(
+              children: [
+            Flexible(
+              flex: 1,
+              child: FormBuilder(
+                key: _formKey,
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                        child: FormBuilderTextField(name: 'name')),
+                    Flexible(
+                      flex: 1,
+                      child: FloatingActionButton(onPressed: () {
+                        query = new ItemQuery();
+                        final name = _formKey.currentState!.fields['name']?.value;
+                        if(name != null && name != "") {
+                          query.name = name;
+                        }
+                        onRefresh();
+                      },
+                      child: Text("Search"),),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 4,
+                child: _list(snapshot)),
+          ]);
         });
   }
 

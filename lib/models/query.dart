@@ -7,6 +7,8 @@ class ItemQuery {
   String? type;
   List<String>? tags;
   String? location;
+  String? name;
+  String? desc;
   DocumentSnapshot<ReferItem>? last;
   var pageSize = 10;
 

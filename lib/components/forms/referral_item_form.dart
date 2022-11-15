@@ -35,7 +35,7 @@ class _ReferItemFormState extends State<ReferItemForm> {
       inAsyncCall: showSpinner,
       child: FormBuilder(
         key: _formKey,
-        child: Column(
+        child: ListView(
           children: [
             FormBuilderTextField(name: 'name',
               initialValue: widget.item?.title,
