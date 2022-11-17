@@ -3,7 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/widgets/refer_item_tile.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
+import 'package:social_share/social_share.dart';
 
+import '../../constants.dart';
 import '../screens/edit_referral_screen.dart';
 
 class ReferralsTab extends StatefulWidget {
@@ -25,21 +27,24 @@ class _ReferralsTabState extends State<ReferralsTab> {
     return FutureBuilder<List<ReferItem>>(
         future: _sl.get<ReferralService>().loadReferrals(),
         builder: (context, snapshot) {
-          return RefreshIndicator(
-              child: Column(children: [
-                Flexible(child: _list(snapshot)),
-                FloatingActionButton(
-                    child: Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.pushNamed(context, EditReferralScreen.id)
-                          .then((value) => { setState(() {})});
-                    })
-              ]),
-              onRefresh: onRefresh);
+          return Stack(
+            children: [RefreshIndicator(
+                child: Column(children: [
+                  Flexible(child: _list(snapshot, context)),
+                  FloatingActionButton(
+                      child: Icon(Icons.add),
+                      onPressed: () {
+                        Navigator.pushNamed(context, EditReferralScreen.id)
+                            .then((value) => { setState(() {})});
+                      }),
+                ]),
+                onRefresh: onRefresh),
+          ],
+          );
         });
   }
 
-  Widget _list(AsyncSnapshot snapshot) {
+  Widget _list(AsyncSnapshot snapshot, BuildContext context) {
     if (snapshot.hasData) {
       List<ReferItem> items = snapshot.data as List<ReferItem>;
 
@@ -50,7 +55,7 @@ class _ReferralsTabState extends State<ReferralsTab> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
-                return ReferItemTile(referItem: item, onDelete: onRefresh);
+                return ReferItemTile(referItem: item, onDelete: onRefresh, onShare: () {shareModalBottomSheet(context);},);
               });
     } else {
       return Center(

@@ -10,8 +10,9 @@ class ReferItemTile extends StatelessWidget {
   final _sl = GetIt.instance;
   final ReferItem referItem;
   final VoidCallback onDelete;
+  final VoidCallback onShare;
 
-  ReferItemTile({required this.referItem, required this.onDelete, Key? key}): super(key: key);
+  ReferItemTile({required this.referItem, required this.onDelete, required this.onShare, Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class ReferItemTile extends StatelessWidget {
 
                 ),
                 SlidableAction(
-                  onPressed: doNothing,
+                  onPressed: doShare,
                   backgroundColor: const Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
                   icon: Icons.share,
@@ -61,7 +62,9 @@ class ReferItemTile extends StatelessWidget {
         ),
       );
   }
-  void doNothing(BuildContext buildContext){}
+  void doShare(BuildContext buildContext){
+    onShare();
+  }
 
   void delete(BuildContext buildContext) async {
     await _sl.get<ReferralService>().removeReferral(referItem);

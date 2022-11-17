@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_share/social_share.dart';
 
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
@@ -37,3 +38,37 @@ const kTextFieldDecoration = InputDecoration(
 );
 
 final String referral = 'referral';
+
+shareModalBottomSheet(context) {
+  showModalBottomSheet(context: context, builder: (BuildContext bc) {
+    return Container(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * .20,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text("Share to"),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.cancel, color: Colors.orange, size: 25,),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+          Text("Sms"),
+          IconButton(icon: Icon(Icons.sms, color: Colors.grey, size: 25,),
+            onPressed: () {
+              SocialShare.shareSms("message");
+            },
+          )
+        ],
+      ),
+    );
+  });
+}

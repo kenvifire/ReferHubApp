@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/widgets/refer_item_tile.dart';
+import 'package:ref_hub_app/constants.dart';
 import 'package:ref_hub_app/models/query.dart';
 import 'package:ref_hub_app/models/referItem.dart';
-
 import '../../services/referral_service.dart';
-import '../screens/edit_referral_screen.dart';
+
 class MarketsTab extends StatefulWidget {
 
   @override
@@ -75,7 +74,7 @@ class _MarketsState extends State<MarketsTab> {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
-            return ReferItemTile(referItem: item, onDelete: onRefresh);
+            return ReferItemTile(referItem: item, onDelete: onRefresh, onShare: () {shareModalBottomSheet(context);},);
           });
     } else {
       return Center(
