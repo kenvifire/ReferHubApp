@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get_it/get_it.dart';
@@ -42,18 +43,35 @@ class _ReferItemFormState extends State<ReferItemForm> {
               enabled: enableEdit,
               decoration: InputDecoration(labelText: 'Enter name',
 
-              errorText: codeLinkError ?? ""),
+              errorText: codeLinkError ?? "", ),
             ),
-            FormBuilderTextField(
-              enabled: enableEdit,
-              initialValue: widget.item?.link,
-              name: 'link',
-              decoration: InputDecoration(labelText: 'Enter link',
-                errorText: codeLinkError ?? ""
-              ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.url(errorText: "Please enter valid url")
-              ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 6,
+                  child: FormBuilderTextField(
+                    enabled: enableEdit,
+                    initialValue: widget.item?.link,
+                    name: 'link',
+                    decoration: InputDecoration(labelText: 'Enter link',
+                      errorText: codeLinkError ?? ""
+                    ),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.url(errorText: "Please enter valid url")
+                    ]),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                    child: IconButton(
+                      icon: Icon(Icons.copy),
+                      onPressed: () async {
+                        await Clipboard.setData(ClipboardData(text: widget.item?.code));
+                      } ,
+                    )
+                )
+              ],
             ),
             FormBuilderTextField(
               enabled: enableEdit,

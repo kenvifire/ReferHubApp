@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             title: const Text("My Referrals",),
             centerTitle: true,
+            backgroundColor: Colors.green,
             automaticallyImplyLeading: false,
           ),
           bottomNavigationBar: menu(context),
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget menu(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Colors.blueGrey,
       child: const TabBar(
         // labelColor: Colors.white,
         // unselectedLabelColor: Colors.white70,

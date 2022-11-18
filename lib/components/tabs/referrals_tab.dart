@@ -24,24 +24,27 @@ class _ReferralsTabState extends State<ReferralsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ReferItem>>(
-        future: _sl.get<ReferralService>().loadReferrals(),
-        builder: (context, snapshot) {
-          return Stack(
-            children: [RefreshIndicator(
-                child: Column(children: [
-                  Flexible(child: _list(snapshot, context)),
-                  FloatingActionButton(
-                      child: Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.pushNamed(context, EditReferralScreen.id)
-                            .then((value) => { setState(() {})});
-                      }),
-                ]),
-                onRefresh: onRefresh),
-          ],
-          );
-        });
+    return Container(
+      color: Colors.orange,
+      child: FutureBuilder<List<ReferItem>>(
+          future: _sl.get<ReferralService>().loadReferrals(),
+          builder: (context, snapshot) {
+            return Stack(
+              children: [RefreshIndicator(
+                  child: Column(children: [
+                    Flexible(child: _list(snapshot, context)),
+                    FloatingActionButton(
+                        child: Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.pushNamed(context, EditReferralScreen.id)
+                              .then((value) => { setState(() {})});
+                        }),
+                  ]),
+                  onRefresh: onRefresh),
+            ],
+            );
+          }),
+    );
   }
 
   Widget _list(AsyncSnapshot snapshot, BuildContext context) {

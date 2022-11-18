@@ -23,12 +23,13 @@ class ReferItemTile extends StatelessWidget {
           vertical: 4.0
         ),
         decoration: BoxDecoration(
-          border: Border.all(),
           borderRadius: BorderRadius.circular(12.0),
+          color: Colors.white54
         ),
         child: SizedBox(
           height: 80,
           child: Slidable(
+            key: Key(referItem.id!),
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               dismissible: DismissiblePane(onDismissed: () {}),

@@ -17,17 +17,20 @@ class _SettingsTabState extends State<SettingsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(_sl.get<UserService>().getUser()!.email!),
-        RoundedButton(
-          title: 'Sign Out',
-          onPressed: () {
-            _sl.get<UserService>().signOut();
-            Navigator.of(context).pushNamed(WelcomeScreen.id);
-          },
-        ),
-      ],
+    return Container(
+      color: Colors.lightBlueAccent,
+      child: Column(
+        children: [
+          Text(_sl.get<UserService>().getUser()!.email!),
+          RoundedButton(
+            title: 'Sign Out',
+            onPressed: () {
+              _sl.get<UserService>().signOut();
+              Navigator.of(context).pushNamed(WelcomeScreen.id);
+            },
+          ),
+        ],
+      ),
     );
   }
 

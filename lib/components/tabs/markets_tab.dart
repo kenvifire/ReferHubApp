@@ -26,41 +26,44 @@ class _MarketsState extends State<MarketsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ReferItem>>(
-        future: _sl.get<ReferralService>().query(query),
-        builder: (context, snapshot) {
-          return Column(
-              children: [
-            Flexible(
-              flex: 1,
-              child: FormBuilder(
-                key: _formKey,
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                        child: FormBuilderTextField(name: 'name')),
-                    Flexible(
-                      flex: 1,
-                      child: FloatingActionButton(onPressed: () {
-                        query = new ItemQuery();
-                        final name = _formKey.currentState!.fields['name']?.value;
-                        if(name != null && name != "") {
-                          query.name = name;
-                        }
-                        onRefresh();
-                      },
-                      child: Text("Search"),),
-                    )
-                  ],
+    return Container(
+      color: Colors.blue,
+      child: FutureBuilder<List<ReferItem>>(
+          future: _sl.get<ReferralService>().query(query),
+          builder: (context, snapshot) {
+            return Column(
+                children: [
+              Flexible(
+                flex: 1,
+                child: FormBuilder(
+                  key: _formKey,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                          child: FormBuilderTextField(name: 'name')),
+                      Flexible(
+                        flex: 1,
+                        child: FloatingActionButton(onPressed: () {
+                          query = new ItemQuery();
+                          final name = _formKey.currentState!.fields['name']?.value;
+                          if(name != null && name != "") {
+                            query.name = name;
+                          }
+                          onRefresh();
+                        },
+                        child: Text("Search"),),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 4,
-                child: _list(snapshot)),
-          ]);
-        });
+              Flexible(
+                flex: 4,
+                  child: _list(snapshot)),
+            ]);
+          }),
+    );
   }
 
   Widget _list(AsyncSnapshot snapshot) {
