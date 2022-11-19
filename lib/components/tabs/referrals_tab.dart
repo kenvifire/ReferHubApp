@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/widgets/refer_item_tile.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
-import 'package:social_share/social_share.dart';
 
 import '../../constants.dart';
 import '../screens/edit_referral_screen.dart';

@@ -41,10 +41,16 @@ class _MarketsState extends State<MarketsTab> {
                     children: [
                       Flexible(
                         flex: 1,
-                          child: FormBuilderTextField(name: 'name')),
+                          child:
+                          FormBuilderTextField(name: 'name',
+                            decoration: InputDecoration(hintText: "Enter name"),
+
+                          )),
+                      Spacer(),
                       Flexible(
                         flex: 1,
-                        child: FloatingActionButton(onPressed: () {
+                        child: IconButton(
+                          onPressed: () {
                           query = new ItemQuery();
                           final name = _formKey.currentState!.fields['name']?.value;
                           if(name != null && name != "") {
@@ -52,11 +58,27 @@ class _MarketsState extends State<MarketsTab> {
                           }
                           onRefresh();
                         },
-                        child: Text("Search"),),
-                      )
+                        icon: Icon(Icons.search, size: 25, color: Colors.white,)),
+                      ),
                     ],
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("Results"),
+                  TextButton(
+                    
+                  onPressed: () {
+                    filterModalBottomSheet(context);
+                  }, child: Text("Filters"),)
+
+                ],
+
+              ),
+              SizedBox(
+                height: 5,
               ),
               Flexible(
                 flex: 4,
@@ -88,6 +110,71 @@ class _MarketsState extends State<MarketsTab> {
 
   Future<void> onRefresh() async {
     setState(() {});
+  }
+
+  filterModalBottomSheet(context) {
+    showModalBottomSheet(context: context, builder: (BuildContext bc) {
+      return Container(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * .60,
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Spacer(),
+                IconButton(
+                  icon: Icon(Icons.cancel, color: Colors.orange, size: 25,),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Row(children: [
+              Text("Tags"),
+            ],),
+            Divider(
+              color: Colors.grey,
+            ),
+            Row(
+              children: [
+                Text("Categories")
+              ],
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Row(
+              children: [
+                Text("User reviews")
+              ],
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Row(
+              children: [
+                Text("Recently added")
+              ],
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Row(
+              children: [
+                Text("Sort by")
+              ],
+            )
+          ],
+        ),
+      );
+    });
   }
 
 }

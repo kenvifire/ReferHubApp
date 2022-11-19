@@ -90,6 +90,17 @@ class _ReferItemFormState extends State<ReferItemForm> {
                   FormBuilderFieldOption(value: 'courses'),
                   FormBuilderFieldOption(value: 'others'),
                 ]),
+            FormBuilderRadioGroup<String>(name: 'category',
+                enabled: enableEdit,
+                initialValue: widget.item?.category,
+                decoration: const InputDecoration(labelText: 'Category for this referral'),
+                options: const [
+                  FormBuilderFieldOption(value: 'software'),
+                  FormBuilderFieldOption(value: 'website'),
+                  FormBuilderFieldOption(value: 'food'),
+                  FormBuilderFieldOption(value: 'courses'),
+                  FormBuilderFieldOption(value: 'others'),
+                ]),
             FormBuilderTextField(name: 'description',
               enabled: enableEdit,
               initialValue: widget.item?.desc,
@@ -117,8 +128,10 @@ class _ReferItemFormState extends State<ReferItemForm> {
                 final name = _formKey.currentState!.fields['name']?.value;
                 final desc = _formKey.currentState!.fields['description']?.value;
                 final tags = _formKey.currentState!.fields['tags']?.value;
+                final category = _formKey.currentState!.fields['category']?.value;
                 final uid = _sl.get<UserService>().getUser()!.uid;
                 ReferItem item = ReferItem(id: widget.item?.id ?? null, uid: uid, title: name, tags: tags, enabled: true,
+                    category: category,
                     link: link, code: code, desc: desc);
                 setState(() {
                   showSpinner = true;

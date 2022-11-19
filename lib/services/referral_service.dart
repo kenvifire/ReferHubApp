@@ -12,7 +12,7 @@ final _sl = GetIt.instance;
 class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
-  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled", "uid"];
+  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled", "uid", "category", "score", "updatedTime", "createdTime"];
 
   initUserData() async {
   }
@@ -43,16 +43,23 @@ class ReferralService {
        }
      });
     return ReferItem(title: e['title'], uid: e['uid'], link: e['link'], id: e['id'],
-        enabled: e['enabled'], tags: tags.map((e) => e as String).toList());
+        enabled: e['enabled'], tags: tags.map((e) => e as String).toList(),
+        category: e['category'], score: e['score'],
+        updatedTime: DateTime.fromMillisecondsSinceEpoch(e['updatedTime']),
+        createdTime: DateTime.fromMillisecondsSinceEpoch(e['createdTime']),
+    );
   }
 
   Future<void> addReferral(ReferItem item) async {
+    ReferItem referItem = ReferItem.from(item);
     final uid = _sl.get<UserService>().getUser()!.uid;
-    Map<String, dynamic> record = toMap(item);
     String id = Uuid().v4();
-    record['id'] = id;
-    record['uid'] = uid;
-    return await _db.collection(referral).doc(id).set(record);
+    referItem.setId(id);
+    referItem.setUid(uid);
+    referItem.setUpdatedTime(DateTime.now());
+    referItem.setCreatedTime(DateTime.now());
+    referItem.setScore(0.0);
+    return await _db.collection(referral).doc(id).set(toMap(referItem));
   }
 
   Map<String, dynamic> toMap(ReferItem item) {
@@ -64,6 +71,10 @@ class ReferralService {
       'desc': item.desc,
       'enabled': item.enabled,
       'uid': item.uid,
+      'updatedTime': item.updatedTime?.millisecondsSinceEpoch,
+      'createdTime': item.createdTime?.microsecondsSinceEpoch,
+      'score': item.score,
+      'category': item.category
     };
 
     for(String tag in item.tags) {
@@ -82,7 +93,9 @@ class ReferralService {
   }
 
   Future<void> updateReferral(ReferItem item) async {
-    await _db.collection(referral).doc(item.id).set(toMap(item));
+    ReferItem referItem = ReferItem.from(item);
+    referItem.setUpdatedTime(DateTime.now());
+    await _db.collection(referral).doc(item.id).update(toMap(referItem));
   }
 
   Future<List<ReferItem>> query(ItemQuery itemQuery) async {

@@ -19,47 +19,43 @@ class ReferItemTile extends StatelessWidget {
     return
       Container(
         margin: EdgeInsets.symmetric(
-          horizontal: 12.0,
           vertical: 4.0
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
           color: Colors.white54
         ),
-        child: SizedBox(
-          height: 80,
-          child: Slidable(
-            key: Key(referItem.id!),
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              dismissible: DismissiblePane(onDismissed: () {}),
-              children: [
-                SlidableAction(
-                  autoClose: false,
-                  onPressed: delete,
-                  backgroundColor: const Color(0xFFFE4A49),
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
+        child: Slidable(
+          key: Key(referItem.id!),
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            dismissible: DismissiblePane(onDismissed: () {}),
+            children: [
+              SlidableAction(
+                autoClose: false,
+                onPressed: delete,
+                backgroundColor: const Color(0xFFFE4A49),
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
 
-                ),
-                SlidableAction(
-                  onPressed: doShare,
-                  backgroundColor: const Color(0xFF21B7CA),
-                  foregroundColor: Colors.white,
-                  icon: Icons.share,
-                  label: 'Share',
-                )
-              ],
-            ),
-          child: ListTile(
-              title: Text(referItem.title),
-              subtitle: Text(referItem.desc ?? ""),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EditReferralScreen(item: this.referItem,)));
-              }),
+              ),
+              SlidableAction(
+                onPressed: doShare,
+                backgroundColor: const Color(0xFF21B7CA),
+                foregroundColor: Colors.white,
+                icon: Icons.share,
+                label: 'Share',
+              )
+            ],
           ),
+        child: ListTile(
+            title: Text(referItem.title),
+            subtitle: Text(referItem.desc ?? ""),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => EditReferralScreen(item: this.referItem,)));
+            }),
         ),
       );
   }
