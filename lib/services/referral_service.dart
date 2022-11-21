@@ -11,7 +11,7 @@ final _sl = GetIt.instance;
 class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
-  final _nonTagFields = ["id", "title", "description", "link", "code", "enabled", "uid", "category", "score", "updatedTime", "createdTime"];
+  final _nonTagFields = ["id", "title", "desc", "link", "code", "enabled", "uid", "category", "score", "updatedTime", "createdTime"];
 
   initUserData() async {
   }
