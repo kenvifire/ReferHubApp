@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ref_hub_app/components/widgets/refer_item_tile.dart';
+import 'package:ref_hub_app/components/widgets/text_field_tags.dart';
 import 'package:ref_hub_app/constants.dart';
 import 'package:ref_hub_app/models/query.dart';
 import 'package:ref_hub_app/models/referItem.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 import '../../services/referral_service.dart';
 
 class MarketsTab extends StatefulWidget {
@@ -18,10 +21,19 @@ class _MarketsState extends State<MarketsTab> {
   late Future<List<ReferItem>> referItems;
   final _formKey = GlobalKey<FormBuilderState>();
   ItemQuery query = ItemQuery();
+  final TextfieldTagsController tagsController = TextfieldTagsController();
+  late double _distanceToField;
+  List<String> tags = [];
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _distanceToField = MediaQuery.of(context).size.width;
   }
 
   @override
@@ -46,15 +58,18 @@ class _MarketsState extends State<MarketsTab> {
                             decoration: InputDecoration(hintText: "Enter name"),
 
                           )),
-                      Spacer(),
                       Flexible(
                         flex: 1,
                         child: IconButton(
                           onPressed: () {
                           query = new ItemQuery();
                           final name = _formKey.currentState!.fields['name']?.value;
+                          final tags = tagsController.getTags;
                           if(name != null && name != "") {
                             query.name = name;
+                          }
+                          if(tags != null) {
+                            query.tags = tags;
                           }
                           onRefresh();
                         },
@@ -136,10 +151,13 @@ class _MarketsState extends State<MarketsTab> {
             Divider(
               color: Colors.grey,
             ),
-            Row(children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Text("Tags"),
-            ],),
-            Divider(
+              TagInput(initialTags: tags, tagController: tagsController, distanceToField: _distanceToField, enabled: true)
+      ],),
+      Divider(
               color: Colors.grey,
             ),
             Row(
@@ -174,6 +192,8 @@ class _MarketsState extends State<MarketsTab> {
           ],
         ),
       );
+    }).whenComplete(() => {
+      tags = tagsController.getTags!
     });
   }
 

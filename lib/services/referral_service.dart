@@ -34,18 +34,17 @@ class ReferralService {
   }
 
   ReferItem mapItem(e) {
-     final data = e as Map<String, dynamic>;
-     final tags = [];
-     data.forEach((key, value) {
-       if(!_nonTagFields.contains(key)) {
-         tags.add(key);
-       }
-     });
+    final tags = (e['tags'] as List).map((item) => item as String).toList();
+
+    // for(var ele in e['tags']) {
+    //   tags.add(ele as String);
+    // }
     return ReferItem(title: e['title'], uid: e['uid'], link: e['link'], id: e['id'],
-        enabled: e['enabled'], tags: tags.map((e) => e as String).toList(),
+        enabled: e['enabled'], tags: tags,
         category: e['category'], score: e['score'],
         updatedTime: DateTime.fromMillisecondsSinceEpoch(e['updatedTime']),
-        createdTime: DateTime.fromMillisecondsSinceEpoch(e['createdTime']),
+        createdTime: DateTime.fromMillisecondsSinceEpoch(e['createdTime'],),
+
     );
   }
 
@@ -73,12 +72,10 @@ class ReferralService {
       'updatedTime': item.updatedTime?.millisecondsSinceEpoch,
       'createdTime': item.createdTime?.microsecondsSinceEpoch,
       'score': item.score,
-      'category': item.category
+      'category': item.category,
+      'tags': item.tags
     };
 
-    for(String tag in item.tags) {
-      record[tag] = true;
-    }
     return record;
   }
 
@@ -101,7 +98,7 @@ class ReferralService {
     var ref = _db.collection(referral);
     Query query = ref.limit(itemQuery.pageSize);//.orderBy('score', descending: true)
     if(itemQuery.tags != null)  {
-      query = query.where('tag', arrayContainsAny: itemQuery.tags);
+      query = query.where('tags', arrayContainsAny: itemQuery.tags);
     }
 
     if(itemQuery.name != null) {

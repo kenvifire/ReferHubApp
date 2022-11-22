@@ -73,6 +73,9 @@ class ReferItem {
     return ReferItem(
         id: other.id,
         title: other.title,
+        desc: other.desc,
+        link: other.link,
+        code: other.code,
         uid: other.uid,
         tags: other.tags,
         category: other.category,
