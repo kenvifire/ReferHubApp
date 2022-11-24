@@ -128,14 +128,14 @@ class _MarketsState extends State<MarketsTab> {
   }
 
   filterModalBottomSheet(context) {
-    showModalBottomSheet(context: context, builder: (BuildContext bc) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (bc) {
       return Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * .60,
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -156,8 +156,8 @@ class _MarketsState extends State<MarketsTab> {
               children: [
               Text("Tags"),
               TagInput(initialTags: tags, tagController: tagsController, distanceToField: _distanceToField, enabled: true)
-      ],),
-      Divider(
+        ],),
+        Divider(
               color: Colors.grey,
             ),
             Row(

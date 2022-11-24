@@ -5,14 +5,29 @@ import 'package:ref_hub_app/components/screens/edit_referral_screen.dart';
 import 'package:ref_hub_app/models/referItem.dart';
 import 'package:ref_hub_app/services/referral_service.dart';
 
+import '../../services/user_service.dart';
 
-class ReferItemTile extends StatelessWidget {
-  final _sl = GetIt.instance;
+class ReferItemTile extends StatefulWidget {
+  ReferItemTile({required this.referItem, required this.onDelete, required this.onShare, Key? key}): super(key: key);
   final ReferItem referItem;
   final VoidCallback onDelete;
   final VoidCallback onShare;
 
-  ReferItemTile({required this.referItem, required this.onDelete, required this.onShare, Key? key}): super(key: key);
+  @override
+  State<ReferItemTile> createState() => _ReferItemTileState();
+}
+
+class _ReferItemTileState extends State<ReferItemTile> {
+  final _sl = GetIt.instance;
+  late bool isFavourite;
+  late final String uid;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavourite = widget.referItem.isFavourite;
+    uid = _sl.get<UserService>().getUser()!.uid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +41,7 @@ class ReferItemTile extends StatelessWidget {
           color: Colors.white54
         ),
         child: Slidable(
-          key: Key(referItem.id!),
+          key: Key(widget.referItem.id!),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dismissible: DismissiblePane(onDismissed: () {}),
@@ -49,28 +64,55 @@ class ReferItemTile extends StatelessWidget {
               )
             ],
           ),
-        child: ListTile(
-            title: Text(referItem.title),
-            subtitle: Text(referItem.desc ?? ""),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EditReferralScreen(item: this.referItem,)));
-            }),
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                  title: Text(widget.referItem.title),
+                  subtitle: Text(widget.referItem.desc ?? ""),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => EditReferralScreen(item: widget.referItem,)));
+                  }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  uid == widget.referItem.uid ? Container() : IconButton(
+                    icon: Icon(isFavourite ? Icons.favorite : Icons.favorite_border, color: Colors.redAccent,),
+                    onPressed: () {
+                      if(!isFavourite) {
+                        _sl.get<ReferralService>().addToFavourite(widget.referItem.id!);
+                      } else {
+                        _sl.get<ReferralService>().removeFromFavourite(widget.referItem.id!);
+                      }
+                      setState(() {
+                        isFavourite = !isFavourite;
+                      });
+
+                    },
+                  ),
+
+                ],
+              )
+            ],
+          ),
+        ),
         ),
       );
   }
   void doShare(BuildContext buildContext){
-    onShare();
+    widget.onShare();
   }
 
   void delete(BuildContext buildContext) async {
-    await _sl.get<ReferralService>().removeReferral(referItem);
+    await _sl.get<ReferralService>().removeReferral(widget.referItem);
     final controller = Slidable.of(buildContext);
     controller?.dismiss(ResizeRequest(const Duration(milliseconds: 300), () {
 
     }),
         duration: const Duration(milliseconds: 300));
-    onDelete();
+    widget.onDelete();
   }
 
 }

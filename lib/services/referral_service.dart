@@ -11,14 +11,14 @@ final _sl = GetIt.instance;
 class ReferralService {
   final _db = FirebaseFirestore.instance;
   final _userService = _sl.get<UserService>();
-  final _nonTagFields = ["id", "title", "desc", "link", "code", "enabled", "uid", "category", "score", "updatedTime", "createdTime"];
 
   initUserData() async {
+
   }
 
   Future<List<ReferItem>> loadReferrals() async {
       final uid = _userService.getUser()!.uid;
-      final data = await _db.collection(kDB).where("uid", isEqualTo: uid).get();
+      final data = await _db.collection(kReferral).where("uid", isEqualTo: uid).get();
       
       if(data.docs.isEmpty) {
         return Future.value([]);
@@ -120,9 +120,57 @@ class ReferralService {
     }
 
     List<ReferItem> items = [];
+    List<String> favouriteList = await loadFavourites();
     snapshot.docs.forEach((doc) {
-        items.add(mapItem(doc.data()));
+      ReferItem item = mapItem(doc.data());
+      item.isFavourite = favouriteList.contains(item.id);
+      items.add(item);
     });
     return Future.value(items);
+  }
+
+  Future<void> scoreItem(String id, double score) async {
+
+  }
+
+  Future<void> addToFavourite(String id) async {
+    final uid = _sl.get<UserService>().getUser()!.uid;
+    final ref = _db.collection(kUser);
+    final doc = await ref.doc(uid).get();
+    if(doc.exists) {
+      print(doc.data());
+      await ref.doc(uid).update({
+        kFavourite: FieldValue.arrayUnion([id])
+      });
+
+    } else {
+      await ref.doc(uid).set({
+        kFavourite: [uid]
+      });
+    }
+  }
+
+  Future<List<String>> loadFavourites() async {
+    final uid = _sl.get<UserService>().getUser()!.uid;
+    final ref = _db.collection(kUser);
+    final data = await ref.doc(uid).get();
+    if(data.exists) {
+      final doc = data.data() as Map<String, dynamic>;
+      return (doc[kFavourite] as List).map((item) => item as String).toList();
+    } else {
+      return Future.value([]);
+    }
+
+  }
+
+  Future<void> removeFromFavourite(String id) async {
+    final uid = _sl.get<UserService>().getUser()!.uid;
+    final ref = _db.collection(kUser);
+    final data = await ref.doc(uid).get();
+    if(data.exists) {
+      await ref.doc(uid).update({
+        kFavourite: FieldValue.arrayRemove([id])
+      });
+    }
   }
 }

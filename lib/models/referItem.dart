@@ -14,6 +14,7 @@ class ReferItem {
   final String category;
 
   late final bool enabled;
+  late bool isFavourite;
 
   ReferItem(
       {this.id,
@@ -27,7 +28,8 @@ class ReferItem {
       this.updatedTime,
       this.createdTime,
       this.score,
-      this.desc});
+      this.desc,
+      this.isFavourite = false});
 
   void setUpdatedTime(DateTime time) {
     updatedTime = time;
@@ -63,6 +65,7 @@ class ReferItem {
         this.updatedTime == other.updatedTime &&
         this.createdTime == other.createdTime &&
         this.category == other.category &&
+        this.isFavourite == other.isFavourite &&
         this.score == other.score;
   }
 
@@ -82,6 +85,7 @@ class ReferItem {
         enabled: other.enabled,
         updatedTime: other.updatedTime,
         createdTime: other.createdTime,
-        score: other.score);
+        score: other.score,
+    isFavourite: other.isFavourite);
   }
 }
