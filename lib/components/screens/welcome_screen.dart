@@ -41,8 +41,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   TypewriterAnimatedText(
                     'My Refer Hub',
                     textStyle: TextStyle(
-                      fontSize: Theme.of(context).textTheme.headline5?.fontSize,
-                      fontWeight: Theme.of(context).textTheme.headline5?.fontWeight
+                      fontSize: Theme.of(context).textTheme.headlineMedium?.fontSize,
+                      fontWeight: Theme.of(context).textTheme.headlineMedium?.fontWeight
                     ),
                     speed: const Duration(milliseconds: 200),
                   )

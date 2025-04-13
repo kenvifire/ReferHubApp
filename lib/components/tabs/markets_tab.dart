@@ -69,7 +69,7 @@ class _MarketsState extends State<MarketsTab> {
                             query.name = name;
                           }
                           if(tags != null) {
-                            query.tags = tags;
+                            query.tags = tags.cast<String>();
                           }
                           onRefresh();
                         },
@@ -192,8 +192,8 @@ class _MarketsState extends State<MarketsTab> {
           ],
         ),
       );
-    }).whenComplete(() => {
-      tags = tagsController.getTags!
+    }).whenComplete(() {
+      tags = tagsController.getTags! as List<String>;
     });
   }
 

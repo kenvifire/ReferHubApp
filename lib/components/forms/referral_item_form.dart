@@ -84,7 +84,7 @@ class _ReferItemFormState extends State<ReferItemForm> {
                     child: IconButton(
                       icon: Icon(Icons.copy),
                       onPressed: () async {
-                        await Clipboard.setData(ClipboardData(text: widget.item?.code));
+                        await Clipboard.setData(ClipboardData(text: widget.item!.code?? ""));
                       } ,
                     )
                 )
@@ -137,7 +137,7 @@ class _ReferItemFormState extends State<ReferItemForm> {
                 final tags = _tagController.getTags;
                 final category = _formKey.currentState!.fields['category']?.value;
                 final uid = _sl.get<UserService>().getUser()!.uid;
-                ReferItem item = ReferItem(id: widget.item?.id ?? null, uid: uid, title: name, tags: tags ?? [], enabled: true,
+                ReferItem item = ReferItem(id: widget.item?.id ?? null, uid: uid, title: name, tags: tags as List<String>, enabled: true,
                     category: category,
                     link: link, code: code, desc: desc);
                 setState(() {
