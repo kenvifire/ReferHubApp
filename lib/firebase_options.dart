@@ -45,7 +45,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '87487911593',
     projectId: 'referhub-ec0d7',
     databaseURL: 'https://referhub-ec0d7.firebaseio.com',
-    storageBucket: 'referhub-ec0d7.appspot.com',
+    storageBucket: 'referhub-ec0d7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -54,8 +54,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '87487911593',
     projectId: 'referhub-ec0d7',
     databaseURL: 'https://referhub-ec0d7.firebaseio.com',
-    storageBucket: 'referhub-ec0d7.appspot.com',
+    storageBucket: 'referhub-ec0d7.firebasestorage.app',
     iosClientId: '87487911593-7isu9prhce3u7kfvchvljhuj66uso13q.apps.googleusercontent.com',
     iosBundleId: 'com.itluobo.myReferHubApp',
   );
+
 }

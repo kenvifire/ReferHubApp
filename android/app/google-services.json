@@ -3,7 +3,7 @@
     "project_number": "87487911593",
     "firebase_url": "https://referhub-ec0d7.firebaseio.com",
     "project_id": "referhub-ec0d7",
-    "storage_bucket": "referhub-ec0d7.appspot.com"
+    "storage_bucket": "referhub-ec0d7.firebasestorage.app"
   },
   "client": [
     {
