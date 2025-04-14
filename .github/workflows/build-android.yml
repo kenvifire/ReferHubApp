@@ -25,10 +25,6 @@ jobs:
       - name: Build release
         run: |
           flutter build appbundle
-        env:
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
