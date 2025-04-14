@@ -1,0 +1,2 @@
+/Volumes/Seagate Basic/code/ReferHubApp/android/app/.cxx/Debug/5fv3y534/x86/CMakeFiles/edit_cache.dir
+/Volumes/Seagate Basic/code/ReferHubApp/android/app/.cxx/Debug/5fv3y534/x86/CMakeFiles/rebuild_cache.dir
