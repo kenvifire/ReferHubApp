@@ -67,13 +67,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: ListView(
             children: <Widget>[
-              Flexible(
-                child: Hero(
-                  tag: 'logo',
-                  child: SizedBox(
-                    height: 200.0,
-                    child: Image.asset('images/logo.png'),
-                  ),
+              Hero(
+                tag: 'logo',
+                child: SizedBox(
+                  height: 160.0,
+                  child: Image.asset('images/logo.png'),
                 ),
               ),
               const SizedBox(
@@ -113,7 +111,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),textAlign: TextAlign.center,),
 
               const SizedBox(
-                height: 24.0,
+                height: 8.0,
               ),
               RoundedButton(title: 'Register', onPressed: () async {
                 _validate();
