@@ -28,20 +28,19 @@ class _ReferralsTabState extends State<ReferralsTab> {
       child: FutureBuilder<List<ReferItem>>(
           future: _sl.get<ReferralService>().loadReferrals(),
           builder: (context, snapshot) {
-            return Stack(
-              children: [RefreshIndicator(
-                  child: Column(children: [
-                    Flexible(child: _list(snapshot, context)),
-                    FloatingActionButton(
+            return RefreshIndicator(
+                child: Column(children: [
+                   _list(snapshot, context),
+                  Center(
+                    child: FloatingActionButton(
                         child: Icon(Icons.add),
                         onPressed: () {
                           Navigator.pushNamed(context, EditReferralScreen.id)
                               .then((value) => { setState(() {})});
                         }),
-                  ]),
-                  onRefresh: onRefresh),
-            ],
-            );
+                  ),
+                ]),
+                onRefresh: onRefresh);
           }),
     );
   }
@@ -52,7 +51,7 @@ class _ReferralsTabState extends State<ReferralsTab> {
 
       return items.isEmpty
           ? const Center(
-              child: Text("Nothing here, add one by click the button."))
+              child: Text("Nothing here, add one by click the button below."))
           : ListView.builder(
               itemCount: items.length,
               itemBuilder: (context, index) {
