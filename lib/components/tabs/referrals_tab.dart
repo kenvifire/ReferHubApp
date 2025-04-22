@@ -29,7 +29,8 @@ class _ReferralsTabState extends State<ReferralsTab> {
           future: _sl.get<ReferralService>().loadReferrals(),
           builder: (context, snapshot) {
             return RefreshIndicator(
-                child: Column(children: [
+                child: Column(
+                    children: [
                    _list(snapshot, context),
                   Center(
                     child: FloatingActionButton(
@@ -52,12 +53,14 @@ class _ReferralsTabState extends State<ReferralsTab> {
       return items.isEmpty
           ? const Center(
               child: Text("Nothing here, add one by click the button below."))
-          : ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return ReferItemTile(referItem: item, onDelete: onRefresh, onShare: () {shareModalBottomSheet(context);},);
-              });
+          : Expanded(
+            child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return ReferItemTile(referItem: item, onDelete: onRefresh, onShare: () {shareModalBottomSheet(context);},);
+                }),
+          );
     } else {
       return Center(
         child: Text(snapshot.hasError ? 'Load error' : 'Loading...'),

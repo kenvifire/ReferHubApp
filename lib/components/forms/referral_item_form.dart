@@ -32,7 +32,7 @@ class _ReferItemFormState extends State<ReferItemForm> {
   void initState() {
     super.initState();
     enableEdit = widget.item == null;
-    _tagController = TextfieldTagsController();
+    _tagController = TextfieldTagsController<String>();
   }
 
   @override

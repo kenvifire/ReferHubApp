@@ -49,13 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
             automaticallyImplyLeading: false,
           ),
           bottomNavigationBar: menu(context),
-          body: TabBarView(
-            // physics: NeverScrollableScrollPhysics(),
-            children: [
-              ReferralsTab(),
-              MarketsTab(),
-              SettingsTab(),
-            ],
+          body: SafeArea(
+            child: TabBarView(
+              children: [
+                ReferralsTab(),
+                MarketsTab(),
+                SettingsTab(),
+              ],
+            ),
           ),
 
         ),
